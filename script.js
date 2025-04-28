@@ -327,96 +327,92 @@ function calculate() {
     sideBySide.className = 'side-by-side';
 
     // Current Mortgage Breakdown
-    const currentBreakdown = document.createElement('div');
-    currentBreakdown.className = 'column';
-    const currentContainer = document.createElement('div');
-    currentContainer.className = 'breakdown-container current';
-    currentContainer.innerHTML = `
-        <div class="breakdown-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
-            </svg>
-        </div>
-        <h4 class="breakdown-subheading current">Current Mortgage</h4>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Outstanding Loan</span>
-            <span class="breakdown-value current">${formatMoney(currentLoan)}</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Remaining Tenure</span>
-            <span class="breakdown-value current">${currentTenure} years</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Interest Rate</span>
-            <span class="breakdown-value current">${currentInterest.toFixed(2)}%</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Monthly Instalment</span>
-            <span class="breakdown-value current">${formatMoney(currentMonthlyPayment)}</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Total Interest paid</span>
-            <span class="breakdown-value current">${formatMoney(currentYearInterest)}</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Outstanding Loan</span>
-            <span class="breakdown-value current">${formatMoney(currentLoanAfterYear)}</span>
-        </div>
-        <div class="breakdown-summary current">
-            Monthly Payment: ${formatMoney(currentMonthlyPayment)}
-        </div>
-    `;
-    currentBreakdown.appendChild(currentContainer);
-    sideBySide.appendChild(currentBreakdown);
+const currentBreakdown = document.createElement('div');
+currentBreakdown.className = 'column';
+const currentContainer = document.createElement('div');
+currentContainer.className = 'breakdown-container current';
+currentContainer.innerHTML = `
+    <div class="breakdown-icon">
+        <img src="https://loan-eligibility.vercel.app/image/TLC_Square.png" alt="TLC Logo" style="width: 100%; height: 100%;">
+    </div>
+    <h4 class="breakdown-subheading current">Current Mortgage</h4>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Outstanding Loan</span>
+        <span class="breakdown-value current">${formatMoney(currentLoan)}</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Remaining Tenure</span>
+        <span class="breakdown-value current">${currentTenure} years</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Interest Rate</span>
+        <span class="breakdown-value current">${currentInterest.toFixed(2)}%</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Monthly Instalment</span>
+        <span class="breakdown-value current">${formatMoney(currentMonthlyPayment)}</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Total Interest paid</span>
+        <span class="breakdown-value current">${formatMoney(currentYearInterest)}</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Outstanding Loan</span>
+        <span class="breakdown-value current">${formatMoney(currentLoanAfterYear)}</span>
+    </div>
+    <div class="breakdown-summary current">
+        Monthly Payment: ${formatMoney(currentMonthlyPayment)}
+    </div>
+`;
+currentBreakdown.appendChild(currentContainer);
+sideBySide.appendChild(currentBreakdown);
 
-    // Refinanced Mortgage Breakdown
-    const newBreakdown = document.createElement('div');
-    newBreakdown.className = 'column';
-    const newContainer = document.createElement('div');
-    newContainer.className = 'breakdown-container refinanced';
-    newContainer.innerHTML = `
-        <div class="breakdown-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z"/>
-            </svg>
-        </div>
-        <h4 class="breakdown-subheading refinanced">Refinanced Mortgage</h4>
-        <div class="breakdown-row">
-            <span class="breakdown-label">New Loan Amount</span>
-            <span class="breakdown-value refinanced">${formatMoney(newLoan)}</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">New Tenure</span>
-            <span class="breakdown-value refinanced">${newTenure} years</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">New Interest Rate</span>
-            <span class="breakdown-value refinanced">${newInterest.toFixed(2)}%</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Monthly Instalment</span>
-            <span class="breakdown-value refinanced">${formatMoney(newMonthlyPayment)}</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Total Interest paid</span>
-            <span class="breakdown-value refinanced">${formatMoney(newYearInterest)}</span>
-        </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Outstanding Loan</span>
-            <span class="breakdown-value refinanced">${formatMoney(newLoanAfterYear)}</span>
-        </div>
-        <div class="breakdown-summary refinanced">
-            Monthly Payment: ${formatMoney(newMonthlyPayment)}
-        </div>
-    `;
-    newBreakdown.appendChild(newContainer);
-    sideBySide.appendChild(newBreakdown);
+// Refinanced Mortgage Breakdown
+const newBreakdown = document.createElement('div');
+newBreakdown.className = 'column';
+const newContainer = document.createElement('div');
+newContainer.className = 'breakdown-container refinanced';
+newContainer.innerHTML = `
+    <div class="breakdown-icon">
+        <img src="https://loan-eligibility.vercel.app/image/TLC_Square.png" alt="TLC Logo" style="width: 100%; height: 100%;">
+    </div>
+    <h4 class="breakdown-subheading refinanced">Refinanced Mortgage</h4>
+    <div class="breakdown-row">
+        <span class="breakdown-label">New Loan Amount</span>
+        <span class="breakdown-value refinanced">${formatMoney(newLoan)}</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">New Tenure</span>
+        <span class="breakdown-value refinanced">${newTenure} years</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">New Interest Rate</span>
+        <span class="breakdown-value refinanced">${newInterest.toFixed(2)}%</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Monthly Instalment</span>
+        <span class="breakdown-value refinanced">${formatMoney(newMonthlyPayment)}</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Total Interest paid</span>
+        <span class="breakdown-label refinanced">${formatMoney(newYearInterest)}</span>
+    </div>
+    <div class="breakdown-row">
+        <span class="breakdown-label">Outstanding Loan</span>
+        <span class="breakdown-value refinanced">${formatMoney(newLoanAfterYear)}</span>
+    </div>
+    <div class="breakdown-summary refinanced">
+        Monthly Payment: ${formatMoney(newMonthlyPayment)}
+    </div>
+`;
+newBreakdown.appendChild(newContainer);
+sideBySide.appendChild(newBreakdown);
 
-    results.appendChild(sideBySide);
-    // Add Disclaimer
-    const disclaimer = document.createElement('div');
-    disclaimer.className = 'disclaimer';
-    disclaimer.textContent = 'Disclaimer from TLC: Figures provided on this page are for illustration purposes and do not constitute as a formal approval from a bank.';
-    results.appendChild(disclaimer);
+results.appendChild(sideBySide);
+// Add Disclaimer
+const disclaimer = document.createElement('div');
+disclaimer.className = 'disclaimer';
+disclaimer.textContent = 'Disclaimer from TLC: Figures provided on this page are for illustration purposes and do not constitute as a formal approval from a bank.';
+results.appendChild(disclaimer);
 }
 
