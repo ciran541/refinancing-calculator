@@ -807,7 +807,7 @@ input::placeholder {
 .breakdown-icon {
     position: absolute;
     top: 25px;
-    right: 20px;
+    left: 20px;
     opacity: 0.9;
     width: 30px;
     height: 30px;
