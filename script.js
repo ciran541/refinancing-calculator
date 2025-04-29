@@ -116,20 +116,22 @@ function validateNewInterestRate(value) {
 
 document.addEventListener('DOMContentLoaded', function() {
     // SORA rates and spread (aligned with BUC Calculator)
-    const threeMonthSORA = 2.3991; // Placeholder: Update with actual 3M SORA rate
-    const spread = 0.28;
-    const spreadRange = "0.28%-0.35%";
-    const defaultInterest = (threeMonthSORA + spread).toFixed(2);
+    const threeMonthSORA = 2.3885; // Placeholder: Update with actual 3M SORA rate
+    const spread = 1;
+    const spreadRange = "1.00% - 1.50%";
+    const exampleInterest = (threeMonthSORA + spread).toFixed(2); // e.g., 3.39
 
-    // Set default interest rates
+    // Set placeholder for current interest rate (no prefill)
     const currentInterestInput = document.getElementById('currentInterestRate');
-    const newInterestInput = document.getElementById('newInterestRate');
-    currentInterestInput.value = defaultInterest;
-    newInterestInput.value = defaultInterest;
+    currentInterestInput.value = ''; // No prefilled value
+    currentInterestInput.placeholder = `E.g ${exampleInterest}`; // Show example like 3.39
 
-    // Set interest rate notes
+    // Set new interest rate input (no prefill, keep existing placeholder)
+    const newInterestInput = document.getElementById('newInterestRate');
+    newInterestInput.value = ''; // No prefilled value
+
+    // Set interest rate note for current interest only
     document.getElementById('currentInterestNote').textContent = `Current 3M SORA: ${threeMonthSORA.toFixed(2)}%, Spread range: ${spreadRange}`;
-    document.getElementById('newInterestNote').textContent = `Current 3M SORA: ${threeMonthSORA.toFixed(2)}%, Spread range: ${spreadRange}`;
 
     // Input elements
     const inputs = {
@@ -272,50 +274,6 @@ function calculate() {
     const monthlyInstalmentDifference = newMonthlyPayment - currentMonthlyPayment;
     const annualInstalmentDifference = monthlyInstalmentDifference * 12;
 
-    // Comparison Container
-    const comparisonContainer = document.createElement('div');
-    comparisonContainer.className = 'comparison-container';
-    comparisonContainer.innerHTML = `
-        <h3 class="comparison-title">1 Year Comparison Summary</h3>
-        <div class="comparison-row">
-            <span class="comparison-label">
-                <svg class="comparison-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M11 2v20c-5.5 0-10-4.5-10-10s4.5-10 10-10zm2 0c5.5 0 10 4.5 10 10s-4.5 10-10 10V2z"/>
-                </svg>
-                Interest Savings
-            </span>
-            <span class="comparison-value ${interestDifference < 0 ? 'positive' : 'negative'}">${formatMoney(Math.abs(interestDifference))}</span>
-        </div>
-        <div class="comparison-row">
-            <span class="comparison-label">
-                <svg class="comparison-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H3V6h14v8zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm13 0v11c0 1.1-.9 2-2 2H4v-2h17V7h2z"/>
-                </svg>
-                Principal Difference
-            </span>
-            <span class="comparison-value ${principalDifference < 0 ? 'positive' : 'negative'}">${formatMoney(Math.abs(principalDifference))}</span>
-        </div>
-        <div class="comparison-row">
-            <span class="comparison-label">
-                <svg class="comparison-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
-                </svg>
-                Monthly Payment Difference
-            </span>
-            <span class="comparison-value ${monthlyInstalmentDifference < 0 ? 'positive' : 'negative'}">${formatMoney(Math.abs(monthlyInstalmentDifference))}</span>
-        </div>
-        <div class="comparison-row">
-            <span class="comparison-label">
-                <svg class="comparison-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
-                </svg>
-                Annual Payment Difference
-            </span>
-            <span class="comparison-value ${annualInstalmentDifference < 0 ? 'positive' : 'negative'}">${formatMoney(Math.abs(annualInstalmentDifference))}</span>
-        </div>
-    `;
-    results.appendChild(comparisonContainer);
-
     // Impact After 1 Year Heading
     const impactHeading = document.createElement('h3');
     impactHeading.className = 'breakdown-title';
@@ -327,92 +285,118 @@ function calculate() {
     sideBySide.className = 'side-by-side';
 
     // Current Mortgage Breakdown
-const currentBreakdown = document.createElement('div');
-currentBreakdown.className = 'column';
-const currentContainer = document.createElement('div');
-currentContainer.className = 'breakdown-container current';
-currentContainer.innerHTML = `
-    <div class="breakdown-icon">
-        <img src="https://loan-eligibility.vercel.app/image/TLC_Square.png" alt="TLC Logo" style="width: 100%; height: 100%;">
-    </div>
-    <h4 class="breakdown-subheading current">Current Mortgage</h4>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Outstanding Loan</span>
-        <span class="breakdown-value current">${formatMoney(currentLoan)}</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Remaining Tenure</span>
-        <span class="breakdown-value current">${currentTenure} years</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Interest Rate</span>
-        <span class="breakdown-value current">${currentInterest.toFixed(2)}%</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Monthly Instalment</span>
-        <span class="breakdown-value current">${formatMoney(currentMonthlyPayment)}</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Total Interest paid</span>
-        <span class="breakdown-value current">${formatMoney(currentYearInterest)}</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Outstanding Loan</span>
-        <span class="breakdown-value current">${formatMoney(currentLoanAfterYear)}</span>
-    </div>
-    <div class="breakdown-summary current">
-        Monthly Payment: ${formatMoney(currentMonthlyPayment)}
-    </div>
-`;
-currentBreakdown.appendChild(currentContainer);
-sideBySide.appendChild(currentBreakdown);
+    const currentBreakdown = document.createElement('div');
+    currentBreakdown.className = 'column';
+    const currentContainer = document.createElement('div');
+    currentContainer.className = 'breakdown-container current';
+    currentContainer.innerHTML = `
+        <div class="breakdown-icon">
+            <img src="https://loan-eligibility.vercel.app/image/TLC_Square.png" alt="TLC Logo" style="width: 100%; height: 100%;">
+        </div>
+        <h4 class="breakdown-subheading current">Current Mortgage</h4>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Outstanding Loan</span>
+            <span class="breakdown-value neutral">${formatMoney(currentLoan)}</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Remaining Tenure</span>
+            <span class="breakdown-value neutral">${currentTenure} years</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Current Interest Rate</span>
+            <span class="breakdown-value neutral">${currentInterest.toFixed(2)}%</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Monthly Instalment</span>
+            <span class="breakdown-value neutral">${formatMoney(currentMonthlyPayment)}</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Total Interest paid</span>
+            <span class="breakdown-value neutral">${formatMoney(currentYearInterest)}</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Outstanding Loan</span>
+            <span class="breakdown-value neutral">${formatMoney(currentLoanAfterYear)}</span>
+        </div>
+        <div class="breakdown-summary neutral">
+            Monthly Payment: ${formatMoney(currentMonthlyPayment)}
+        </div>
+    `;
+    currentBreakdown.appendChild(currentContainer);
+    sideBySide.appendChild(currentBreakdown);
 
-// Refinanced Mortgage Breakdown
-const newBreakdown = document.createElement('div');
-newBreakdown.className = 'column';
-const newContainer = document.createElement('div');
-newContainer.className = 'breakdown-container refinanced';
-newContainer.innerHTML = `
-    <div class="breakdown-icon">
-        <img src="https://loan-eligibility.vercel.app/image/TLC_Square.png" alt="TLC Logo" style="width: 100%; height: 100%;">
-    </div>
-    <h4 class="breakdown-subheading refinanced">Refinanced Mortgage</h4>
-    <div class="breakdown-row">
-        <span class="breakdown-label">New Loan Amount</span>
-        <span class="breakdown-value refinanced">${formatMoney(newLoan)}</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">New Tenure</span>
-        <span class="breakdown-value refinanced">${newTenure} years</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">New Interest Rate</span>
-        <span class="breakdown-value refinanced">${newInterest.toFixed(2)}%</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Monthly Instalment</span>
-        <span class="breakdown-value refinanced">${formatMoney(newMonthlyPayment)}</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Total Interest paid</span>
-        <span class="breakdown-label refinanced">${formatMoney(newYearInterest)}</span>
-    </div>
-    <div class="breakdown-row">
-        <span class="breakdown-label">Outstanding Loan</span>
-        <span class="breakdown-value refinanced">${formatMoney(newLoanAfterYear)}</span>
-    </div>
-    <div class="breakdown-summary refinanced">
-        Monthly Payment: ${formatMoney(newMonthlyPayment)}
-    </div>
-`;
-newBreakdown.appendChild(newContainer);
-sideBySide.appendChild(newBreakdown);
+    // Refinanced Mortgage Breakdown
+    const newBreakdown = document.createElement('div');
+    newBreakdown.className = 'column';
+    const newContainer = document.createElement('div');
+    newContainer.className = 'breakdown-container refinanced';
+    // Determine classes for conditional coloring
+    const interestRateClass = newInterest < currentInterest ? 'success' : newInterest > currentInterest ? 'error' : 'neutral';
+    const monthlyPaymentClass = newMonthlyPayment < currentMonthlyPayment ? 'success' : newMonthlyPayment > currentMonthlyPayment ? 'error' : 'neutral';
+    newContainer.innerHTML = `
+        <div class="breakdown-icon">
+            <img src="https://loan-eligibility.vercel.app/image/TLC_Square.png" alt="TLC Logo" style="width: 100%; height: 100%;">
+        </div>
+        <h4 class="breakdown-subheading refinanced">Refinanced Mortgage</h4>
+        <div class="breakdown-row">
+            <span class="breakdown-label">New Loan Amount</span>
+            <span class="breakdown-value neutral">${formatMoney(newLoan)}</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">New Tenure</span>
+            <span class="breakdown-value neutral">${newTenure} years</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">New Interest Rate</span>
+            <span class="breakdown-value ${interestRateClass}">${newInterest.toFixed(2)}%</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Monthly Instalment</span>
+            <span class="breakdown-value neutral">${formatMoney(newMonthlyPayment)}</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Total Interest paid</span>
+            <span class="breakdown-value neutral">${formatMoney(newYearInterest)}</span>
+        </div>
+        <div class="breakdown-row">
+            <span class="breakdown-label">Outstanding Loan</span>
+            <span class="breakdown-value neutral">${formatMoney(newLoanAfterYear)}</span>
+        </div>
+        <div class="breakdown-summary neutral">
+            Monthly Payment: <span class="summary-value ${monthlyPaymentClass}">${formatMoney(newMonthlyPayment)}</span>
+        </div>
+    `;
+    newBreakdown.appendChild(newContainer);
+    sideBySide.appendChild(newBreakdown);
+    results.appendChild(sideBySide);
 
-results.appendChild(sideBySide);
-// Add Disclaimer
-const disclaimer = document.createElement('div');
-disclaimer.className = 'disclaimer';
-disclaimer.textContent = 'Disclaimer from TLC: Figures provided on this page are for illustration purposes and do not constitute as a formal approval from a bank.';
-results.appendChild(disclaimer);
+    // Comparison Container
+    const comparisonContainer = document.createElement('div');
+    comparisonContainer.className = 'comparison-container';
+    comparisonContainer.innerHTML = `
+        <h3 class="comparison-title">1 Year Comparison Summary</h3>
+        <div class="comparison-row">
+            <span class="comparison-label">Interest Savings Difference</span>
+            <span class="comparison-value ${interestDifference < 0 ? 'positive' : interestDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(interestDifference))}</span>
+        </div>
+        <div class="comparison-row">
+            <span class="comparison-label">Principal Balance Difference</span>
+            <span class="comparison-value ${principalDifference < 0 ? 'positive' : principalDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(principalDifference))}</span>
+        </div>
+        <div class="comparison-row">
+            <span class="comparison-label">Monthly Instalment Difference</span>
+            <span class="comparison-value ${monthlyInstalmentDifference < 0 ? 'positive' : monthlyInstalmentDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(monthlyInstalmentDifference))}</span>
+        </div>
+        <div class="comparison-row">
+            <span class="comparison-label">Annual Instalment Difference</span>
+            <span class="comparison-value ${annualInstalmentDifference < 0 ? 'positive' : annualInstalmentDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(annualInstalmentDifference))}</span>
+        </div>
+    `;
+    results.appendChild(comparisonContainer);
+
+    // Add Disclaimer
+    const disclaimer = document.createElement('div');
+    disclaimer.className = 'disclaimer';
+    disclaimer.textContent = 'Disclaimer from TLC: Figures provided on this page are for illustration purposes and do not constitute as a formal approval from a bank.';
+    results.appendChild(disclaimer);
 }
-
