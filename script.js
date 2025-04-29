@@ -295,11 +295,11 @@ function calculate() {
         </div>
         <h4 class="breakdown-subheading current">Current Mortgage</h4>
         <div class="breakdown-row">
-            <span class="breakdown-label">Outstanding Loan</span>
+            <span class="breakdown-label">Current Loan Amount</span>
             <span class="breakdown-value neutral">${formatMoney(currentLoan)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Remaining Tenure</span>
+            <span class="breakdown-label">Current Tenure</span>
             <span class="breakdown-value neutral">${currentTenure} years</span>
         </div>
         <div class="breakdown-row">
@@ -311,11 +311,11 @@ function calculate() {
             <span class="breakdown-value neutral">${formatMoney(currentMonthlyPayment)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Total Interest paid</span>
+            <span class="breakdown-label">Total Interest Paid</span>
             <span class="breakdown-value neutral">${formatMoney(currentYearInterest)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Outstanding Loan</span>
+            <span class="breakdown-label">Balance Loan after 1 Year</span>
             <span class="breakdown-value neutral">${formatMoney(currentLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
@@ -355,11 +355,11 @@ function calculate() {
             <span class="breakdown-value neutral">${formatMoney(newMonthlyPayment)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Total Interest paid</span>
+            <span class="breakdown-label">Total Interest Paid</span>
             <span class="breakdown-value neutral">${formatMoney(newYearInterest)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Outstanding Loan</span>
+            <span class="breakdown-label">Balance Loan after 1 Year</span>
             <span class="breakdown-value neutral">${formatMoney(newLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
