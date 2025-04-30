@@ -52,7 +52,7 @@ body {
 .inputs-section {
     flex: 0.8;
     min-width: 300px;
-    padding: 30px;
+    padding: 10px;
     border-right: 1px solid var(--border-color);
     background-color: #fff;
 }
