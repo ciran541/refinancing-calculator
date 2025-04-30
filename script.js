@@ -405,41 +405,71 @@ function calculate() {
 document.addEventListener('DOMContentLoaded', function() {
     // Function to send height to parent window with extra padding
     function sendHeight() {
-        // Get the document height and add some extra padding (20px)
-        const height = document.body.scrollHeight + 20;
+        // Get the document height with extra padding
+        // Using Math.max to ensure we use the largest height value from various methods
+        const height = Math.max(
+            document.body.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.clientHeight,
+            document.documentElement.scrollHeight,
+            document.documentElement.offsetHeight
+        ) + 20; // Add 20px padding
+        
         window.parent.postMessage({ type: 'setHeight', height: height }, '*');
     }
 
+    // Debounce function to prevent too many resize events
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
+
+    // Use debounced version for events that may fire rapidly
+    const debouncedSendHeight = debounce(sendHeight, 50);
+
     // Send height on important events
-    const events = ['load', 'resize', 'input', 'change'];
+    const events = ['resize', 'input', 'change', 'click', 'keyup', 'transitionend', 'animationend'];
     events.forEach(event => {
-        window.addEventListener(event, sendHeight);
+        window.addEventListener(event, debouncedSendHeight);
     });
 
     // Watch for DOM changes
-    const observer = new MutationObserver(function() {
-        // Small delay to ensure all DOM changes are completed
-        setTimeout(sendHeight, 50);
-    });
+    const observer = new MutationObserver(debouncedSendHeight);
     observer.observe(document.body, {
         childList: true,
         subtree: true,
         attributes: true,
-        characterData: true
+        characterData: true,
+        attributeFilter: ['style', 'class', 'id']
     });
 
     // Handle height requests from parent window
     window.addEventListener('message', function(event) {
-        if (event.data.type === 'requestHeight') {
+        if (event.data && event.data.type === 'requestHeight') {
             sendHeight();
         }
     });
 
-    // Initial height send with slight delay to ensure full rendering
-    setTimeout(sendHeight, 300);
-
-    // Also send after all images and assets are loaded
+    // Initial height sends at strategic times
+    setTimeout(sendHeight, 100); // Quick initial check
+    setTimeout(sendHeight, 500); // Secondary check after initial rendering
+    
+    // Check after all images and resources have loaded
     window.addEventListener('load', function() {
-        setTimeout(sendHeight, 500);
+        sendHeight();
+        // Additional check slightly after load completes
+        setTimeout(sendHeight, 1000);
     });
+    
+    // Send height when fonts load (if font loading API is available)
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(sendHeight);
+    }
 });
