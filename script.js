@@ -244,17 +244,17 @@ function calculate() {
     resultsHeader.className = 'results-header';
     
     const resultsIcon = document.createElement('div');
-    resultsIcon.className = 'results-icon';
-    resultsIcon.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0V0z" fill="none"/>
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-7-2h2v-5h-4v7h2zm-2-7h4V5h-4z"/>
-        </svg>
-    `;
+    // resultsIcon.className = 'results-icon';
+    // resultsIcon.innerHTML = `
+    //     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    //         <path d="M0 0h24v24H0V0z" fill="none"/>
+    //         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-7-2h2v-5h-4v7h2zm-2-7h4V5h-4z"/>
+    //     </svg>
+    // `;
     
     const resultsTitle = document.createElement('h2');
     resultsTitle.className = 'results-title';
-    resultsTitle.textContent = 'Refinancing Results';
+    // resultsTitle.textContent = 'Refinancing Results';
     
     resultsHeader.appendChild(resultsIcon);
     resultsHeader.appendChild(resultsTitle);
@@ -306,20 +306,17 @@ function calculate() {
             <span class="breakdown-label">Current Interest Rate</span>
             <span class="breakdown-value neutral">${currentInterest.toFixed(2)}%</span>
         </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Monthly Instalment</span>
-            <span class="breakdown-value neutral">${formatMoney(currentMonthlyPayment)}</span>
-        </div>
+        
         <div class="breakdown-row">
             <span class="breakdown-label">Total Interest Paid</span>
             <span class="breakdown-value neutral">${formatMoney(currentYearInterest)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Balance Loan after 1 Year</span>
+            <span class="breakdown-label">Balance Principal after 1 Year</span>
             <span class="breakdown-value neutral">${formatMoney(currentLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
-            Monthly Payment: ${formatMoney(currentMonthlyPayment)}
+            Monthly Instalment: ${formatMoney(currentMonthlyPayment)}
         </div>
     `;
     currentBreakdown.appendChild(currentContainer);
@@ -350,20 +347,17 @@ function calculate() {
             <span class="breakdown-label">New Interest Rate</span>
             <span class="breakdown-value ${interestRateClass}">${newInterest.toFixed(2)}%</span>
         </div>
-        <div class="breakdown-row">
-            <span class="breakdown-label">Monthly Instalment</span>
-            <span class="breakdown-value neutral">${formatMoney(newMonthlyPayment)}</span>
-        </div>
+        
         <div class="breakdown-row">
             <span class="breakdown-label">Total Interest Paid</span>
             <span class="breakdown-value neutral">${formatMoney(newYearInterest)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Balance Loan after 1 Year</span>
+            <span class="breakdown-label">Balance Principal after 1 Year</span>
             <span class="breakdown-value neutral">${formatMoney(newLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
-            Monthly Payment: <span class="summary-value ${monthlyPaymentClass}">${formatMoney(newMonthlyPayment)}</span>
+            Monthly Instalment: <span class="summary-value ${monthlyPaymentClass}">${formatMoney(newMonthlyPayment)}</span>
         </div>
     `;
     newBreakdown.appendChild(newContainer);
