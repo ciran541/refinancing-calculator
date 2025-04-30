@@ -312,7 +312,7 @@ function calculate() {
             <span class="breakdown-value neutral">${formatMoney(currentYearInterest)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Balance Principal after 1 Year</span>
+            <span class="breakdown-label">Balance Principal<br>(After 1 Year)</span>
             <span class="breakdown-value neutral">${formatMoney(currentLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
@@ -353,7 +353,7 @@ function calculate() {
             <span class="breakdown-value neutral">${formatMoney(newYearInterest)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Balance Principal after 1 Year</span>
+            <span class="breakdown-label">Balance Principal<br>(After 1 Year)</span>
             <span class="breakdown-value neutral">${formatMoney(newLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
