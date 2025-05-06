@@ -1,7 +1,7 @@
 // Currency formatting (aligned with BUC Calculator)
 function formatMoney(amount) {
-    return "$" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-}
+    return "$" + Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
 // Calculate monthly installment (EMI)
 function calculateEMI(principal, rate, tenure) {
@@ -370,7 +370,7 @@ function calculate() {
     comparisonContainer.innerHTML = `
         <h3 class="comparison-title">1 Year Comparison Summary</h3>
         <div class="comparison-row">
-            <span class="comparison-label">Interest Savings Difference</span>
+            <span class="comparison-label">Interest Payment Difference</span>
             <span class="comparison-value ${interestDifference < 0 ? 'positive' : interestDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(interestDifference))}</span>
         </div>
         <div class="comparison-row">
