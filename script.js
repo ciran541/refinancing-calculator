@@ -1,7 +1,26 @@
 // Currency formatting (aligned with BUC Calculator)
 function formatMoney(amount) {
     return "$" + Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+}
+
+// Format number with commas for input fields
+function formatNumberWithCommas(value) {
+    // Remove non-numeric characters except for decimal point
+    value = value.replace(/[^0-9.]/g, '');
+    // Split on decimal point to handle integers only
+    const parts = value.split('.');
+    let integerPart = parts[0];
+    // Add commas to integer part
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // Return formatted number (ignore decimal part for now as per requirements)
+    return integerPart;
+}
+
+// Parse number by removing commas
+function parseNumber(value) {
+    if (!value) return NaN;
+    return parseFloat(value.replace(/,/g, ''));
+}
 
 // Calculate monthly installment (EMI)
 function calculateEMI(principal, rate, tenure) {
@@ -163,24 +182,52 @@ document.addEventListener('DOMContentLoaded', function() {
         newInterestRate: document.querySelector('label[for="newInterestRate"]')
     };
 
-    // Validation event listeners
-    Object.keys(inputs).forEach(key => {
+    // Real-time comma formatting for loan amount inputs
+    ['currentLoanAmount', 'newLoanAmount'].forEach(key => {
+        inputs[key].addEventListener('input', function(e) {
+            const cursorPosition = e.target.selectionStart;
+            const valueBefore = e.target.value;
+            const formattedValue = formatNumberWithCommas(e.target.value);
+            e.target.value = formattedValue;
+
+            // Adjust cursor position to account for added/removed commas
+            const commasBeforeCursor = (valueBefore.slice(0, cursorPosition).match(/,/g) || []).length;
+            const newCommasBeforeCursor = (formattedValue.slice(0, cursorPosition).match(/,/g) || []).length;
+            const cursorAdjustment = newCommasBeforeCursor - commasBeforeCursor;
+            e.target.setSelectionRange(cursorPosition + cursorAdjustment, cursorPosition + cursorAdjustment);
+
+            // Trigger validation
+            const value = parseNumber(formattedValue);
+            let error = null;
+            if (key === 'currentLoanAmount') {
+                error = validateCurrentLoanAmount(value);
+            } else {
+                error = validateNewLoanAmount(value);
+            }
+
+            if (error) {
+                errors[key].textContent = error;
+                errors[key].style.display = 'block';
+                labels[key].classList.add('error');
+            } else {
+                errors[key].style.display = 'none';
+                labels[key].classList.remove('error');
+            }
+        });
+    });
+
+    // Validation event listeners for non-loan amount inputs
+    ['currentTenure', 'currentInterestRate', 'newTenure', 'newInterestRate'].forEach(key => {
         inputs[key].addEventListener('input', function() {
             const value = parseFloat(this.value);
             let error = null;
 
             switch (key) {
-                case 'currentLoanAmount':
-                    error = validateCurrentLoanAmount(value);
-                    break;
                 case 'currentTenure':
                     error = validateCurrentTenure(value);
                     break;
                 case 'currentInterestRate':
                     error = validateCurrentInterestRate(value);
-                    break;
-                case 'newLoanAmount':
-                    error = validateNewLoanAmount(value);
                     break;
                 case 'newTenure':
                     error = validateNewTenure(value);
@@ -199,7 +246,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 labels[key].classList.remove('error');
             }
         });
+    });
 
+    // Blur event listeners for all inputs
+    Object.keys(inputs).forEach(key => {
         inputs[key].addEventListener('blur', function() {
             if (!this.value) {
                 errors[key].textContent = "This field is required";
@@ -208,13 +258,46 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Iframe resizer
+    function sendHeight() {
+        const height = document.body.scrollHeight + 20;
+        window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+    }
+
+    const events = ['load', 'resize', 'input', 'change'];
+    events.forEach(event => {
+        window.addEventListener(event, sendHeight);
+    });
+
+    const observer = new MutationObserver(function() {
+        setTimeout(sendHeight, 50);
+    });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        characterData: true
+    });
+
+    window.addEventListener('message', function(event) {
+        if (event.data.type === 'requestHeight') {
+            sendHeight();
+        }
+    });
+
+    setTimeout(sendHeight, 300);
+
+    window.addEventListener('load', function() {
+        setTimeout(sendHeight, 500);
+    });
 });
 
 function calculate() {
-    const currentLoan = parseFloat(document.getElementById('currentLoanAmount').value);
+    const currentLoan = parseNumber(document.getElementById('currentLoanAmount').value);
     const currentTenure = parseFloat(document.getElementById('currentTenure').value);
     const currentInterest = parseFloat(document.getElementById('currentInterestRate').value);
-    const newLoan = parseFloat(document.getElementById('newLoanAmount').value);
+    const newLoan = parseNumber(document.getElementById('newLoanAmount').value);
     const newTenure = parseFloat(document.getElementById('newTenure').value);
     const newInterest = parseFloat(document.getElementById('newInterestRate').value);
     const errorBox = document.getElementById('error');
@@ -244,17 +327,9 @@ function calculate() {
     resultsHeader.className = 'results-header';
     
     const resultsIcon = document.createElement('div');
-    // resultsIcon.className = 'results-icon';
-    // resultsIcon.innerHTML = `
-    //     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    //         <path d="M0 0h24v24H0V0z" fill="none"/>
-    //         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-7-2h2v-5h-4v7h2zm-2-7h4V5h-4z"/>
-    //     </svg>
-    // `;
     
     const resultsTitle = document.createElement('h2');
     resultsTitle.className = 'results-title';
-    // resultsTitle.textContent = 'Refinancing Results';
     
     resultsHeader.appendChild(resultsIcon);
     resultsHeader.appendChild(resultsTitle);
@@ -299,20 +374,19 @@ function calculate() {
             <span class="breakdown-value neutral">${formatMoney(currentLoan)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Current Tenure</span>
+            <span class="breakdown-label">Current Tenure</span>
             <span class="breakdown-value neutral">${currentTenure} years</span>
         </div>
         <div class="breakdown-row">
             <span class="breakdown-label">Current Interest Rate</span>
             <span class="breakdown-value neutral">${currentInterest.toFixed(2)}%</span>
         </div>
-        
         <div class="breakdown-row">
             <span class="breakdown-label">Total Interest Paid</span>
             <span class="breakdown-value neutral">${formatMoney(currentYearInterest)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Balance Principal<br>(After 1 Year)</span>
+            <span class="breakdown-label">Balance Principal<br>(After 1 Year)</span>
             <span class="breakdown-value neutral">${formatMoney(currentLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
@@ -347,13 +421,12 @@ function calculate() {
             <span class="breakdown-label">New Interest Rate</span>
             <span class="breakdown-value ${interestRateClass}">${newInterest.toFixed(2)}%</span>
         </div>
-        
         <div class="breakdown-row">
             <span class="breakdown-label">Total Interest Paid</span>
             <span class="breakdown-value neutral">${formatMoney(newYearInterest)}</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Balance Principal<br>(After 1 Year)</span>
+            <span class="breakdown-label">Balance Principal<br>(After 1 Year)</span>
             <span class="breakdown-value neutral">${formatMoney(newLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
@@ -394,46 +467,3 @@ function calculate() {
     disclaimer.textContent = 'Disclaimer from TLC: Figures provided on this page are for illustration purposes and do not constitute as a formal approval from a bank.';
     results.appendChild(disclaimer);
 }
-
-// Iframe resizer
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to send height to parent window with extra padding
-    function sendHeight() {
-        // Get the document height and add some extra padding (20px)
-        const height = document.body.scrollHeight + 20;
-        window.parent.postMessage({ type: 'setHeight', height: height }, '*');
-    }
-
-    // Send height on important events
-    const events = ['load', 'resize', 'input', 'change'];
-    events.forEach(event => {
-        window.addEventListener(event, sendHeight);
-    });
-
-    // Watch for DOM changes
-    const observer = new MutationObserver(function() {
-        // Small delay to ensure all DOM changes are completed
-        setTimeout(sendHeight, 50);
-    });
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        characterData: true
-    });
-
-    // Handle height requests from parent window
-    window.addEventListener('message', function(event) {
-        if (event.data.type === 'requestHeight') {
-            sendHeight();
-        }
-    });
-
-    // Initial height send with slight delay to ensure full rendering
-    setTimeout(sendHeight, 300);
-
-    // Also send after all images and assets are loaded
-    window.addEventListener('load', function() {
-        setTimeout(sendHeight, 500);
-    });
-});

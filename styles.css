@@ -161,6 +161,10 @@ input[type="number"], input[type="text"] {
     background-color: #fff;
 }
 
+input[type="text"] {
+    font-family: inherit;
+}
+
 .input-container:focus-within {
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 0 2px rgba(5, 45, 74, 0.1);
@@ -874,7 +878,7 @@ input::placeholder {
     }
 
     input[type="number"], input[type="text"] {
-        font-size: 13px;
+        font-size: 14px;
         padding: 8px 10px;
     }
 
