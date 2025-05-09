@@ -451,13 +451,14 @@ function calculate() {
             <span class="comparison-value ${principalDifference < 0 ? 'positive' : principalDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(principalDifference))}</span>
         </div>
         <div class="comparison-row">
-            <span class="comparison-label">Monthly Instalment Difference</span>
-            <span class="comparison-value ${monthlyInstalmentDifference < 0 ? 'positive' : monthlyInstalmentDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(monthlyInstalmentDifference))}</span>
-        </div>
-        <div class="comparison-row">
             <span class="comparison-label">Annual Instalment Difference</span>
             <span class="comparison-value ${annualInstalmentDifference < 0 ? 'positive' : annualInstalmentDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(annualInstalmentDifference))}</span>
         </div>
+        <div class="comparison-row">
+            <span class="comparison-label">Monthly Instalment Difference</span>
+            <span class="comparison-value ${monthlyInstalmentDifference < 0 ? 'positive' : monthlyInstalmentDifference > 0 ? 'negative' : 'neutral'}">${formatMoney(Math.abs(monthlyInstalmentDifference))}</span>
+        </div>
+        
     `;
     results.appendChild(comparisonContainer);
 
