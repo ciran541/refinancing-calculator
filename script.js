@@ -382,7 +382,7 @@ function calculate() {
             <span class="breakdown-value neutral">${currentInterest.toFixed(2)}%</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Total Interest Paid</span>
+            <span class="breakdown-label">Total Interest Paid<br>(After 1 Year)</span>
             <span class="breakdown-value neutral">${formatMoney(currentYearInterest)}</span>
         </div>
         <div class="breakdown-row">
@@ -422,7 +422,7 @@ function calculate() {
             <span class="breakdown-value ${interestRateClass}">${newInterest.toFixed(2)}%</span>
         </div>
         <div class="breakdown-row">
-            <span class="breakdown-label">Total Interest Paid</span>
+            <span class="breakdown-label">Total Interest Paid<br>(After 1 Year)</span>
             <span class="breakdown-value neutral">${formatMoney(newYearInterest)}</span>
         </div>
         <div class="breakdown-row">
