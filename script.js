@@ -404,6 +404,8 @@ function calculate() {
     // Determine classes for conditional coloring
     const interestRateClass = newInterest < currentInterest ? 'success' : newInterest > currentInterest ? 'error' : 'neutral';
     const monthlyPaymentClass = newMonthlyPayment < currentMonthlyPayment ? 'success' : newMonthlyPayment > currentMonthlyPayment ? 'error' : 'neutral';
+    const interestPaidClass = newYearInterest < currentYearInterest ? 'success' : newYearInterest > currentYearInterest ? 'error' : 'neutral';
+    const principalBalanceClass = newLoanAfterYear < currentLoanAfterYear ? 'success' : newLoanAfterYear > currentLoanAfterYear ? 'error' : 'neutral';
     newContainer.innerHTML = `
         <div class="breakdown-icon">
             <img src="https://loan-eligibility.vercel.app/image/TLC_Square.png" alt="TLC Logo" style="width: 100%; height: 100%;">
@@ -423,11 +425,11 @@ function calculate() {
         </div>
         <div class="breakdown-row">
             <span class="breakdown-label">Total Interest Paid<br>(After 1 Year)</span>
-            <span class="breakdown-value neutral">${formatMoney(newYearInterest)}</span>
+            <span class="breakdown-value ${interestPaidClass}">${formatMoney(newYearInterest)}</span>
         </div>
         <div class="breakdown-row">
             <span class="breakdown-label">Balance Principal<br>(After 1 Year)</span>
-            <span class="breakdown-value neutral">${formatMoney(newLoanAfterYear)}</span>
+            <span class="breakdown-value ${principalBalanceClass}">${formatMoney(newLoanAfterYear)}</span>
         </div>
         <div class="breakdown-summary neutral">
             Monthly Instalment: <span class="summary-value ${monthlyPaymentClass}">${formatMoney(newMonthlyPayment)}</span>
