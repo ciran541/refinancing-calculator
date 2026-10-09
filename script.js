@@ -135,7 +135,7 @@ function validateNewInterestRate(value) {
 
 document.addEventListener('DOMContentLoaded', function() {
     // SORA rates and spread (aligned with BUC Calculator)
-    const threeMonthSORA = 1.2323
+    const threeMonthSORA = 1.2310
 
 
 ; // Placeholder: Update with actual 3M SORA rate
